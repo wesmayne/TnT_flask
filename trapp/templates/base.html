@@ -6,8 +6,7 @@
 <head>
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--taking these two away breaks the top nav bar-->
+    <!--taking this away breaks the top nav bar-->
     <link rel="stylesheet" href="static\css\nav-top.css">
     <!--taking these two away breaks the bottom nav bar-->
     <link rel="stylesheet" type="text/css" href="static\css\nav-bottom.css">
@@ -15,79 +14,75 @@
     <!--icons link-->
     <script src="https://kit.fontawesome.com/6bf07408f9.js" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="static\css\nav-top-2.css">
+    <link rel="stylesheet" href="static\css\search.css">
+
+
 </head>
 
-<!--sidebar element-->
+<!--sidebar-->
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
 
-<body>
-    <nav class="w3-sidebar w3-bar-block w3-card" id="mySidebar" style="padding-top:50px">
-        <div class="w3-container w3-theme-l4">
-            <span onclick="closeSidebar()" class="w3-button w3-display-topright w3-large"
-                style="padding-top:100px">X</span>
-            <br>
-            <div class="w3-padding w3-center">
-                <i class="fas fa-map-marker-alt fa-3x" style="color:red;padding-top:20px"></i>
-                <h3>Track n Trace</h3>
-            </div>
+    <button class="w3-bar-item w3-button w3-large" style="background-color: rgb(187, 185, 185)"
+        onclick="w3_close()">Close
+        &times;</button>
+    <div style="border-bottom: 1px solid black;padding-top: 20px;background-color: #f1bb57" align="middle">
+        <img class="w3-circle" src="static\img\lion.png" style="max-width:30%;" alt="Lion">
+        <h3>Track n Trace</h3>
+    </div>
+    <a href="{{ url_for('about') }}" class="w3-bar-item w3-button">About</a>
+    <a href="#" class="w3-bar-item w3-button">System Status</a>
+    <a href="#" class="w3-bar-item w3-button">Map</a>
+
+</div>
+<!--end of sidebar-->
+
+<!--top navbar-->
+<div class="top-navbar">
+    <button class="w3-bar-item w3-button w3-xxlarge w3-hover-theme" onclick="w3_open()">&#9776;</button>
+    <!--search bar begins here-->
+
+    <form>
+        <div class="" style="padding-left: 3px">
+            <input class="search-control" name="search" placeholder="Search Here" autocomplete="off"
+                autofocus="autofocus" type="text">
+            <button class="btn btn-outline-success" type="submit">Search</button>
         </div>
-        <a class="w3-bar-item w3-button" href="{{ url_for('about') }}">About</a>
-        <a class="w3-bar-item w3-button" href="#">System Status</a>
-        <a class="w3-bar-item w3-button" href="#">Map</a>
-    </nav>
-    <!--end of sidebar element-->
+    </form>
 
-    <header class="w3-top w3-bar w3-theme">
-        <button class="w3-bar-item w3-button w3-xxlarge w3-hover-theme" style="padding-top:20px"
-            onclick="openSidebar()">&#9776;</button>
-        <h1 class="w3-bar-item">TnT</h1>
+    <!--Search bar ends here-->
+</div>
+<!--end of top navbar-->
 
-    </header>
+{% block content %}{% endblock %}
 
-    {% block content %}{% endblock %}
+<!--bottom navbar begins here-->
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
 
-    <!--navbar begins here-->
-
-    <nav class="navbar navbar-inverse navbar-fixed-bottom">
-
-        <div class="mobile-bottom-bar">
-            <a href="{{ url_for('orders') }}" class="footer-link">
-                <i class="fas fa-list fa-3x"></i> <span class='footer-text'><br>Orders</span>
-            </a>
-            <a href="{{ url_for('late') }}" class="footer-link">
-                <i class="fas fa-clock fa-3x"></i> <span class='footer-text'><br>Late</span>
-            </a>
-            <a href="{{ url_for('si') }}" class="footer-link">
-                <i class="fas fa-exclamation-circle fa-3x"></i> <span class='footer-text'><br>SI</span>
-            </a>
-        </div>
-    </nav>
+    <div class="mobile-bottom-bar">
+        <a href="{{ url_for('orders') }}" class="footer-link">
+            <i class="fas fa-list fa-3x"></i> <span class='footer-text'><br>Orders</span>
+        </a>
+        <a href="{{ url_for('late') }}" class="footer-link">
+            <i class="fas fa-clock fa-3x"></i> <span class='footer-text'><br>Late</span>
+        </a>
+        <a href="{{ url_for('si') }}" class="footer-link">
+            <i class="fas fa-exclamation-circle fa-3x"></i> <span class='footer-text'><br>SI</span>
+        </a>
+    </div>
+</nav>
 
 
-    <script>
-        closeSidebar();
+<script>
 
-        function openSidebar() {
-            document.getElementById("mySidebar").style.display = "block";
-        }
+    function w3_open() {
+        document.getElementById("mySidebar").style.display = "block";
+    }
 
-        function closeSidebar() {
-            document.getElementById("mySidebar").style.display = "none";
-        }
+    function w3_close() {
+        document.getElementById("mySidebar").style.display = "none";
+    }
+</script>
 
-        function w3_open() {
-            document.getElementById("main").style.marginLeft = "25%";
-            document.getElementById("mySidebar").style.width = "25%";
-            document.getElementById("mySidebar").style.display = "block";
-            document.getElementById("openNav").style.display = 'none';
-        }
-
-        function w3_close() {
-            document.getElementById("main").style.marginLeft = "0%";
-            document.getElementById("mySidebar").style.display = "none";
-            document.getElementById("openNav").style.display = "inline-block";
-        }
-    </script>
-
-</body>
 
 </html>

@@ -35,5 +35,5 @@ def si():
 
 @app.route("/detail")
 def detail():
-    return render_template("/detail.html", title=f"TnT - {id}")
+    return render_template("/detail.html",title=f"TnT - Detail")
 

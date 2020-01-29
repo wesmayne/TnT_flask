@@ -6,16 +6,18 @@
 <head>
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!--taking this away breaks the top nav bar-->
-    <link rel="stylesheet" href="static\css\nav-top.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav-top.css')}}">
+
     <!--taking these two away breaks the bottom nav bar-->
-    <link rel="stylesheet" type="text/css" href="static\css\nav-bottom.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/nav-bottom.css')}}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <!--icons link-->
     <script src="https://kit.fontawesome.com/6bf07408f9.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="static\css\nav-top-2.css">
-    <link rel="stylesheet" href="static\css\search.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav-top-2.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css')}}">
 
 
 </head>
@@ -27,7 +29,7 @@
         onclick="w3_close()">Close
         &times;</button>
     <div style="border-bottom: 1px solid black;padding-top: 20px;background-color: #f1bb57" align="middle">
-        <img class="w3-circle" src="static\img\lion.png" style="max-width:30%;" alt="Lion">
+        <img class="w3-circle" src="{{ url_for('static', filename='img/lion.png')}}" style="max-width:30%;" alt="Lion">
         <h3>Track n Trace</h3>
     </div>
     <a href="{{ url_for('about') }}" class="w3-bar-item w3-button">About</a>

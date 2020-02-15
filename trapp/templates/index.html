@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div class="w3-container" style="padding-top:45px;padding-bottom:70px;">
+<div class="w3-container" style="padding-top:85px;padding-bottom:70px;">
 
     <!-- starts here-->
     {% for row in query %}
@@ -11,7 +11,15 @@
     <a href="orders/{{row[1]}}">
         <div class="w3-cell-row">
             <div class="w3-cell" style="width:10%">
+                {% if row['Status'] == 'PODed' and row['SICode'] == None %}
                 <i class="fas fa-check-circle fa-2x" style="float:left; margin-top:30px;color:green"></i>
+                {% elif row['Status'].endswith('LATE') %}
+                <i class="fas fa-clock fa-2x" style="float:left; margin-top:30px;color:red"></i>
+                {% elif row['SICode'] != None %}
+                <i class="fas fa-check-circle fa-2x" style="float:left; margin-top:30px;color:orange"></i>
+                {% else %}
+                <i class="fas fa-check-circle fa-2x" style="float:left; margin-top:30px;color:green"></i>
+                {% endif %}
             </div>
             <div class="w3-cell w3-container">
                 <h3>{{row['SiteName']}}</h3>

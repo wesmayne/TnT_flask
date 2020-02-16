@@ -3,38 +3,23 @@ from config import Config
 import sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
 
-# import flask_whooshalchemy
-
-
 app = Flask(__name__, static_folder="static", template_folder="templates")
-
 
 connection_string = f"mssql+pymssql://{Config.user}:{Config.password}@{Config.servername}/{Config.database}"
 engine = sqlalchemy.create_engine(connection_string)
 conn = engine.connect()
-'''
-# this is where im trying to create a direct connection to the table
-
-app.config[
-    "SQLALCHEMY_DATABASE_URI"
-] = f"mssql+pymssql://{Config.user}:{Config.password}@{Config.servername}/{Config.database}"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['WHOOSH_BASE']='whoosh'
-
-db = SQLAlchemy(app)
-
-customer = db.Table(
-    "LDD.Appsheet_NO", db.metadata, autoload=True, autoload_with=db.engine
-)
+query = conn.execute("SELECT * FROM [LDD.AppSheet_NO]").fetchall()
 
 
 @app.route("/test", methods=["GET"])
 def test():
-    """testing page"""
-    query = db.session.query(customer).whoosh_search(request.args.get('query')).all()
-    sitecode = results[0][1]
-    return render_template("/index.html",query=query)
-'''
+    """testing late"""
+    picked = []
+    for row in query:
+        if row["Status"] == "Picked":
+            picked.append(row)
+
+    return render_template("/index.html",query=picked)
 
 
 @app.route("/", methods=["GET"])
@@ -58,22 +43,27 @@ def status():
 @app.route("/orders", methods=["GET"])
 def orders():
     """Orders page"""
-    query = conn.execute("SELECT * FROM [LDD.AppSheet_NO]")
     return render_template("/index.html", title="TnT - Orders", query=query)
 
 
 @app.route("/late", methods=["GET"])
 def late():
     """Late page"""
-    query = conn.execute("SELECT * FROM [LDD.AppSheet_NO] WHERE Status LIKE '%LATE'")
-    return render_template("/index.html", title="TnT - Late", query=query)
+    late = []
+    for row in query:
+        if row["Status"] == "LATE":
+            late.append(row)
+    return render_template("/index.html", title="TnT - Late", query=late)
 
 
 @app.route("/si", methods=["GET"])
 def si():
     """SI page"""
-    query = conn.execute("SELECT * FROM [LDD.AppSheet_NO] WHERE SICode IS NOT NULL")
-    return render_template("/index.html", title="TnT - SI", query=query)
+    si = []
+    for row in query:
+        if row["SICode"] is not None:
+            si.append(row)
+    return render_template("/index.html", title="TnT - SI", query=si)
 
 
 # need help with the search function
@@ -85,27 +75,28 @@ def search():
 
 @app.route("/orders/<order>")
 def detail(order):
-    query = conn.execute(f"SELECT * FROM [LDD.AppSheet_NO] where OrderNumber = {order}")
-    rows = query.fetchall()
+    detail = []
+    for row in query:
+        if row['OrderNumber'] == order:
+            detail.append(row)
 
-    # vars
-    site = rows[0][2]
-    status = rows[0][7]
-    order = rows[0][1]
-    address = rows[0][4]
-    suburb = rows[0][5]
-    state = rows[0][6]
-    delivery_time = rows[0][9]
-    cus_window = rows[0][10]
-    signed_by = rows[0][12]
-    to_window = rows[0][14]
-    del_instructions = rows[0][13]
-    si_code = rows[0][16]
-    tnt_url = rows[0][18]
-    attachment1 = rows[0][19]
-    attachment2 = rows[0][20]
-    attachment3 = rows[0][21]
-    attachment4 = rows[0][22]
+    site = detail[0][2]
+    status = detail[0][7]
+    order = detail[0][1]
+    address = detail[0][4]
+    suburb = detail[0][5]
+    state = detail[0][6]
+    delivery_time = detail[0][9]
+    cus_window = detail[0][10]
+    signed_by = detail[0][12]
+    to_window = detail[0][14]
+    del_instructions = detail[0][13]
+    si_code = detail[0][16]
+    tnt_url = detail[0][18]
+    attachment1 = detail[0][19]
+    attachment2 = detail[0][20]
+    attachment3 = detail[0][21]
+    attachment4 = detail[0][22]
 
     return render_template(
         "/detail.html",
@@ -131,4 +122,4 @@ def detail(order):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
